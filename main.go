@@ -9,12 +9,13 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/xuri/excelize/v2"
 )
 
 var templates *template.Template
 
 // Product represents a single affiliate product
-type Product struct {
+type Products struct {
 	Name        string
 	Description string
 	Link        string
@@ -47,14 +48,58 @@ func main() {
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }
 
+func newProduct(name string, description string, link string, imageurl string) Products {
+	// Instantiate the struct and return it
+	return Products{
+		Name:        name,
+		Description: description,
+		Link:        link,
+		ImageURL:    imageurl,
+	}
+}
+
+func readProducts() []Products {
+	file, err := excelize.OpenFile("static/data/products.xlsx")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	rows, err := file.GetRows("product")
+	if err != nil {
+		log.Fatal(err)
+	}
+	var name, desc, imageURL, link = "", "", "", ""
+	var product []Products
+	for krow, row := range rows {
+		//fmt.Print(krow, "\n")
+		if krow != 0 {
+			for kcol, col := range row {
+				//fmt.Print(kcol, "\n")
+				//fmt.Print(col, "\t")
+				switch kcol {
+				case 1:
+					name = col
+				case 2:
+					desc = col
+				case 3:
+					imageURL = col
+				case 4:
+					link = col
+				}
+			}
+			np := newProduct(name, desc, link, imageURL)
+			product = append(product, np)
+		}
+		//fmt.Println()
+	}
+
+	return product
+}
+
 // homeHandler serves the homepage
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	// Define some sample products (You can fetch these from an API or database)
-	products := []Product{
-		{Name: "Product 1", Description: "Description for Product 1", Link: "https://example.com/product1", ImageURL: "/static/img/product1.jpg"},
-		{Name: "Product 2", Description: "Description for Product 2", Link: "https://example.com/product2", ImageURL: "/static/img/product2.jpg"},
-	}
-
+	products := readProducts()
 	// Render the template and pass the product data
 	templates.ExecuteTemplate(w, "index.html", products)
 }

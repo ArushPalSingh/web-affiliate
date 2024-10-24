@@ -1,22 +1,172 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Affiliate Website</title>
+    <title>Lifestyle Review</title>
+    <link rel="stylesheet" href="static/css/layout.css" type="text/css" />
+    <script type="text/javascript" src="static/js/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/css/style.css">
+    <script type="text/javascript">
+        jQuery(function () {
+            jQuery('ul.nav').superfish();
+        });
+    </script>
 </head>
-<body>
-    <h1>Affiliate Products</h1>
-    <div class="product-list">
+<body id="top">
+    <div class="wrapper">
+      <div id="header">
+        <h1><a href="index.html">Lifestyle</a></h1>
+        <p>Free Website Template</p>
+      </div>
+    </div>
+    <!-- ####################################################################################################### -->
+<div class="wrapper">
+    <div id="topbar">
+      <div class="fl_left">Tel: xxxxx xxxxxxxxxx | Mail: info@domain.com</div>
+      <div class="fl_right">
+        <form action="#" method="post">
+          <fieldset>
+            <legend>Site Search</legend>
+            <input type="text" value="Search Our Website&hellip;"  onfocus="this.value=(this.value=='Search Our Website&hellip;')? '' : this.value ;" />
+            <input type="submit" name="go" id="go" value="Search" />
+          </fieldset>
+        </form>
+      </div>
+      <br class="clear" />
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <!-- <div class="wrapper">
+    <div id="topnav">
+      <ul class="nav">
+        <li class="active"><a href="index.html">Homepage</a></li>
+        <li><a href="pages/style-demo.html">Style Demo</a></li>
+        <li><a href="pages/full-width.html">Full Width</a></li>
+        <li><a href="#">DropDown</a>
+          <ul>
+            <li><a href="#">menu item</a></li>
+            <li><a href="#">menu item</a>
+              <ul>
+                <li><a href="#">menu item</a></li>
+                <li><a href="#">menu item</a>
+                  <ul>
+                    <li><a href="#">menu item</a></li>
+                    <li><a href="#">menu item</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#">menu item</a>
+              <ul>
+                <li><a href="#">menu item</a></li>
+                <li><a href="#">menu item</a></li>
+              </ul>
+            </li>
+            <li><a href="#">menu item</a></li>
+          </ul>
+        </li>
+        <li><a href="pages/portfolio.html">Portfolio</a></li>
+        <li class="last"><a href="pages/gallery.html">Gallery</a></li>
+      </ul>
+      <div class="clear"></div>
+    </div>
+  </div>-->
+  <!-- ####################################################################################################### -->
+  <div class="product-list">
+    {{range .}}
+    <div class="product">
+        <img src="{{.ImageURL}}" alt="{{.Name}}">
+        <h2>{{.Name}}</h2>
+        <p>{{.Description}}</p>
+        <a href="{{.Link}}" target="_blank">Buy Now</a>
+    </div>
+    {{end}}
+</div>
+  <div class="wrapper">
+    <div class="container">
+      <div class="whitebox" id="hpage_services">
         {{range .}}
-        <div class="product">
-            <img src="{{.ImageURL}}" alt="{{.Name}}">
-            <h2>{{.Name}}</h2>
-            <p>{{.Description}}</p>
-            <a href="{{.Link}}" target="_blank">Buy Now</a>
+        <div class="block"><img src="{{.ImageURL}}" width="46" height="46"  alt="{{.Name}}" />
+            <strong>{{.Name}}</strong>
+          <p>{{.Description}}</p>
+          <!-- <p><a href="{{.Link}}" target="_blank">Buy Now</a></p> -->
         </div>
         {{end}}
+        <div class="spacer">&nbsp;</div>
+        <div class="clear"></div>
+      </div>
+      <!-- ####################################################################################################### -->
+      <div id="hpage_latest">
+        <ul>
+          <li>
+            <div class="imgholder"><a href="#"><img src="images/demo/260x180.gif" width="260" height="180" alt="" /></a></div>
+            <p><strong>Lorum ipsum dolor</strong></p>
+            <p>Orciint erdum condimen terdum nulla mcorper elit nam curabitur laoreet met prae senean et iac ulum. Metridiculis cons eque quis iaculum aenean nunc aenean.</p>
+          </li>
+          <li>
+            <div class="imgholder"><a href="#"><img src="images/demo/260x180.gif" width="260" height="180" alt="" /></a></div>
+            <p><strong>Lorum ipsum dolor</strong></p>
+            <p>Orciint erdum condimen terdum nulla mcorper elit nam curabitur laoreet met prae senean et iac ulum. Metridiculis cons eque quis iaculum aenean nunc aenean.</p>
+          </li>
+          <li class="last">
+            <div class="imgholder"><a href="#"><img src="images/demo/260x180.gif" width="260" height="180" alt="" /></a></div>
+            <p><strong>Lorum ipsum dolor</strong></p>
+            <p>Orciint erdum condimen terdum nulla mcorper elit nam curabitur laoreet met prae senean et iac ulum. Metridiculis cons eque quis iaculum aenean nunc aenean.</p>
+          </li>
+        </ul>
+        <br class="clear" />
+      </div>
     </div>
-</body>
-</html>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper">
+    <div id="footer">
+      <div class="latestgallery">
+        <h2>Latest Projects</h2>
+        <ul>
+          <li><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li class="last"><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+          <li class="last"><a href="#"><img src="images/demo/80x80.gif" alt="" /></a></li>
+        </ul>
+      </div>
+      <div class="footbox">
+        <h2>Latest From The Blog</h2>
+        <ul>
+          <li><a href="#">Lorem ipsum dolor</a></li>
+          <li><a href="#">Suspendisse in neque</a></li>
+          <li><a href="#">Praesent et eros</a></li>
+          <li><a href="#">Lorem ipsum dolor</a></li>
+          <li><a href="#">Suspendisse in neque</a></li>
+          <li class="last"><a href="#">Praesent et eros</a></li>
+        </ul>
+      </div>
+      <div class="footbox last">
+        <h2>Keep In Touch</h2>
+        <ul>
+          <li><a href="#">Lorem ipsum dolor</a></li>
+          <li><a href="#">Suspendisse in neque</a></li>
+          <li><a href="#">Praesent et eros</a></li>
+          <li><a href="#">Lorem ipsum dolor</a></li>
+          <li><a href="#">Suspendisse in neque</a></li>
+          <li class="last"><a href="#">Praesent et eros</a></li>
+        </ul>
+      </div>
+      <br class="clear" />
+    </div>
+  </div>
+  <!-- ####################################################################################################### -->
+  <div class="wrapper">
+    <div id="copyright">
+      <p class="fl_left">Copyright &copy; 2014 - All Rights Reserved - <a href="#">Domain Name</a></p>
+      <p class="fl_right">Template by <a target="_blank" href="http://www.os-templates.com/" title="Free Website Templates">OS Templates</a></p>
+      <br class="clear" />
+    </div>
+  </div>
+  </body>
+  </html>
