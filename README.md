@@ -1,2 +1,2 @@
 # web-affiliate
-program
+An affiliate website
