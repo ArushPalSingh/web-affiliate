@@ -21,6 +21,10 @@ type Products struct {
 	Link        string
 	ImageURL    string
 }
+type Data struct {
+	Products   []Products
+	Affiliates []Products
+}
 
 func main() {
 	// Load environment variables
@@ -58,13 +62,13 @@ func newProduct(name string, description string, link string, imageurl string) P
 	}
 }
 
-func readProducts() []Products {
-	file, err := excelize.OpenFile("static/data/products.xlsx")
+func readExcel(sheetName string) []Products {
+	file, err := excelize.OpenFile("static/data/products.xlsx", excelize.Options{Password: "Aff@166"})
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer file.Close()
-	rows, err := file.GetRows("product")
+	rows, err := file.GetRows(sheetName)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -98,8 +102,9 @@ func readProducts() []Products {
 
 // homeHandler serves the homepage
 func homeHandler(w http.ResponseWriter, r *http.Request) {
-	// Define some sample products (You can fetch these from an API or database)
-	products := readProducts()
+	var data Data
+	data.Products = readExcel("product")
+	data.Affiliates = readExcel("affiliates")
 	// Render the template and pass the product data
-	templates.ExecuteTemplate(w, "index.html", products)
+	templates.ExecuteTemplate(w, "index.html", data)
 }
