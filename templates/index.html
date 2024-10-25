@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lifestyle News</title>
+    <title>Trendsetter</title>
     <link rel="stylesheet" href="static/css/layout.css" type="text/css" />
     <script type="text/javascript" src="static/js/jquery.min.js"></script>
     <link rel="stylesheet" href="/static/css/style.css">
@@ -11,8 +11,8 @@
 <body id="top">
     <div class="wrapper">
       <div id="header">
-        <h1><a href="index.html">Lifestyle News</a></h1>
-        <p>Re-View your lifestyle </p>
+        <h1><a href="index.html">Trends</a></h1>
+        <p>Re-View your life </p>
       </div>
     </div>
     <!-- ####################################################################################################### -->
@@ -73,7 +73,7 @@
       <div class="whitebox" id="hpage_services">
         {{range .Products}}
         <div class="block"><img src="{{.ImageURL}}" width="46" height="46"  alt="{{.Name}}" />
-            <strong>{{.Name}}</strong>
+            <strong><a href="{{.Link}}" target="_blank">{{.Name}}</a></strong>
           <p>{{.Description}}</p>
           <!-- <p><a href="{{.Link}}" target="_blank">Buy Now</a></p> -->
         </div>

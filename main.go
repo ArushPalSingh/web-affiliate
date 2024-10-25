@@ -80,6 +80,7 @@ func readExcel(sheetName string) []Products {
 			for kcol, col := range row {
 				//fmt.Print(kcol, "\n")
 				//fmt.Print(col, "\t")
+				kcol = kcol + 1
 				switch kcol {
 				case 1:
 					name = col
