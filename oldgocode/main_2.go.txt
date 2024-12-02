@@ -1,0 +1,146 @@
+package main_2
+
+import (
+	"database/sql"
+	"encoding/json"
+	"fmt"
+	"log"
+	"net/http"
+	"strconv"
+
+	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
+)
+
+type Article struct {
+	ID      int    `json:"id"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
+}
+
+var db *sql.DB
+
+func main() {
+	var err error
+	db, err = sql.Open("sqlite3", "./articles.db")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
+
+	// Create articles table if it doesn't exist
+	_, err = db.Exec(`CREATE TABLE IF NOT EXISTS articles (
+		id INTEGER PRIMARY KEY AUTOINCREMENT,
+		title TEXT,
+		content TEXT
+	)`)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	r := mux.NewRouter()
+
+	r.HandleFunc("/api/articles", getArticles).Methods("GET")
+	r.HandleFunc("/api/articles", createArticle).Methods("POST")
+	r.HandleFunc("/api/articles/{id}", getArticle).Methods("GET")
+	r.HandleFunc("/api/articles/{id}", updateArticle).Methods("PUT")
+	r.HandleFunc("/api/articles/{id}", deleteArticle).Methods("DELETE")
+
+	// Serve static files
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("./static")))
+
+	fmt.Println("Server is running on http://localhost:8080")
+	log.Fatal(http.ListenAndServe(":8080", r))
+}
+
+func getArticles(w http.ResponseWriter, r *http.Request) {
+	rows, err := db.Query("SELECT id, title, content FROM articles")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	defer rows.Close()
+
+	var articles []Article
+	for rows.Next() {
+		var article Article
+		err := rows.Scan(&article.ID, &article.Title, &article.Content)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		articles = append(articles, article)
+	}
+
+	json.NewEncoder(w).Encode(articles)
+}
+
+func createArticle(w http.ResponseWriter, r *http.Request) {
+	var article Article
+	json.NewDecoder(r.Body).Decode(&article)
+
+	result, err := db.Exec("INSERT INTO articles (title, content) VALUES (?, ?)", article.Title, article.Content)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	id, _ := result.LastInsertId()
+	article.ID = int(id)
+
+	json.NewEncoder(w).Encode(article)
+}
+
+func getArticle(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, _ := strconv.Atoi(params["id"])
+
+	var article Article
+	err := db.QueryRow("SELECT id, title, content FROM articles WHERE id = ?", id).Scan(&article.ID, &article.Title, &article.Content)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.NotFound(w, r)
+		} else {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
+		return
+	}
+
+	json.NewEncoder(w).Encode(article)
+}
+
+func updateArticle(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, _ := strconv.Atoi(params["id"])
+
+	var article Article
+	json.NewDecoder(r.Body).Decode(&article)
+
+	_, err := db.Exec("UPDATE articles SET title = ?, content = ? WHERE id = ?", article.Title, article.Content, id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	article.ID = id
+	json.NewEncoder(w).Encode(article)
+}
+
+func deleteArticle(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id, _ := strconv.Atoi(params["id"])
+
+	result, err := db.Exec("DELETE FROM articles WHERE id = ?", id)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+	if rowsAffected == 0 {
+		http.NotFound(w, r)
+		return
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+}

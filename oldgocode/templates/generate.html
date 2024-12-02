@@ -1,0 +1,24 @@
+<form id="generateForm">
+    <input type="text" id="prompt" placeholder="Enter a prompt for the AI" required /><br><br>
+    <button type="submit">Generate AI Poem</button>
+</form>
+<div id="generatedPoem"></div>
+
+<script>
+    async function generatePoem(event) {
+        event.preventDefault();
+        const prompt = document.getElementById('prompt').value;
+
+        const response = await fetch('http://localhost:8080/generate-poem', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt }),
+        });
+
+        const poem = await response.json();
+        const generatedDiv = document.getElementById('generatedPoem');
+        generatedDiv.innerHTML = `<h3>${poem.title}</h3><p>${poem.content}</p>`;
+    }
+
+    document.getElementById('generateForm').addEventListener('submit', generatePoem);
+</script>
